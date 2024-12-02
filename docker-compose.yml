@@ -18,7 +18,7 @@ services:
 
   # Collection doesn't work yet as this jaeger doesn't like the open telemetry traces
   collector:
-    image: jaegertracing/jaeger:2.0.0
+    image: jaegertracing/all-in-one
     ports:
       - "5778:5778"
       - "5779:5779"
@@ -29,9 +29,11 @@ services:
       - "14268:14268"
       - "9411:9411"
     environment:
-      RECEIVERS_OTLP_PROTOCOLS_HTTP_ENDPOINT: "0.0.0.0:4318"
+#      COLLECTOR_OTLP_ENABLED: "true" # Not sure this is needed
       RECEIVERS_OTLP_PROTOCOLS_GRPC_ENDPOINT: "0.0.0.0:4317"
-      COLLECTOR_OTLP_ENABLED: true # Not sure this is needed
+      RECEIVERS_OTLP_PROTOCOLS_HTTP_ENDPOINT: "x.0.0.0:4318"
+#      SERVICE_PIPELINES_TRACES_RECEIVERS: "otlp"
+
 
 #  collector:
 #    image: logzio/otel-collector-traces

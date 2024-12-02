@@ -23,4 +23,13 @@ The above HTTP call goes to the `api-service`, which will call the `customer-ser
 
 The `docker-compose` command also starts up an OpenTelemetry Collector, to which the Spring Boot apps send their traces. The OpenTelemetry Collector, in turn, sends the traces to Logz.io.
 
+## After a change
 
+```shell
+./mvnw clean install
+docker compose up --build --force-recreate -d # to make sure the new code or application.yaml is used by the container
+```
+
+# Docs
+
+https://docs.spring.io/spring-boot/reference/actuator/tracing.html

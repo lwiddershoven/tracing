@@ -7,21 +7,11 @@ spring:
   application:
     name: customer-service
 
-  sleuth:
-    otel:
-      exporter:
-        otlp:
-          endpoint: http://collector:4317
-        metrics:
-          enabled: false
-    sampler:
-      probability: 1
-
 management:
-  endpoint:
-    beans:
-      enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: beans
+  tracing:
+    sampling:
+      probability: 1
+  otlp:
+    tracing:
+      endpoint: http://collector:4317
+      transport: grpc
