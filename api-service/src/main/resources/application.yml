@@ -7,9 +7,6 @@ customerClient:
   baseUrl: http://customer-service:8081
 
 spring:
-  output:
-    ansi:
-      enabled: always
   application:
     name: api-service
 
