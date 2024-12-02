@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -11,9 +12,9 @@ public class AddressClient {
     private final String baseUrl;
 
     public AddressClient(
-            RestTemplate restTemplate,
+            RestTemplateBuilder restTemplateBuilder,
             @Value("${addressClient.baseUrl}") String baseUrl) {
-        this.restTemplate = restTemplate;
+        this.restTemplate = restTemplateBuilder.build();
         this.baseUrl = baseUrl;
     }
 

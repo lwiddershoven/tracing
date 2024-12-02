@@ -3,6 +3,7 @@ package com.example.demo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
@@ -15,9 +16,9 @@ public class CustomerClient {
 	private String baseUrl;
 
 	public CustomerClient(
-			RestTemplate restTemplate,
+			RestTemplateBuilder restTemplateBuilder,
 			@Value("${customerClient.baseUrl}") String baseUrl) {
-		this.restTemplate = restTemplate;
+		this.restTemplate = restTemplateBuilder.build();
 		this.baseUrl = baseUrl;
 	}
 
