@@ -1,13 +1,6 @@
 package com.example.demo;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-
-import io.micrometer.tracing.Tracer;
 import io.opentelemetry.api.baggage.Baggage;
-import io.opentelemetry.api.baggage.BaggageEntry;
 import io.opentelemetry.context.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 public class Controller {
@@ -37,7 +33,7 @@ public class Controller {
     }
 
     private void logBaggage() {
-        io.opentelemetry.api.baggage.Baggage baggage = Baggage.fromContext(Context.current()); // opentelemtry API. TODO check how micrometer does tgis
+        io.opentelemetry.api.baggage.Baggage baggage = Baggage.fromContext(Context.current()); // opentelemetry API.
         baggage.asMap()
                 .entrySet()
                 .forEach(entry -> logger.info("Baggage [{},{}]", entry.getKey(), entry.getValue()));
