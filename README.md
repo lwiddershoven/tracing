@@ -48,6 +48,9 @@ management:
     sampling:
       probability: 1 # Register every trace instead of the default 0.1 (10%)
 
+    baggage:
+      tag-fields: use-case-baggage # to copy this baggage field to the span as a tag
+
     tracing:
       endpoint: http://collector:4317 # Jaeger endpoint
       transport: grpc # 
@@ -66,6 +69,11 @@ view on which systems are involved in handling that use-case.
 
 The awkward names 'use-case-baggage' and 'use-case-tag' are for demo purposes only, so that it is really clear where 
 the data came from.
+
+It does look like baggage is only added to the span if it is created there. So the customer service does not
+seem to get the baggage copied into the span, although the baggage is available and can be used and if 
+necessary programmatically set on the span.
+
 
 ## Generic Tips
 
