@@ -47,10 +47,6 @@ management:
   tracing:
     sampling:
       probability: 1 # Register every trace instead of the default 0.1 (10%)
-      
-    baggage:
-      remote-fields: use-case-baggage # incoming headers to read as baggage
-      tag-fields: use-case-baggage # baggage to add to trace info submitted to jaeger
 
     tracing:
       endpoint: http://collector:4317 # Jaeger endpoint
@@ -85,3 +81,4 @@ Some extra tips on working with this code.
 # Docs
 
 https://docs.spring.io/spring-boot/reference/actuator/tracing.html
+https://runebook.dev/en/articles/spring_boot/application-properties/application-properties.actuator.management.tracing.baggage.remote-fields
