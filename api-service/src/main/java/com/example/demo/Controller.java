@@ -20,56 +20,56 @@ import java.util.function.Supplier;
 @RestController
 public class Controller {
 
-  private CustomerClient customerClient;
+    private CustomerClient customerClient;
 
-  private AddressClient addressClient;
+    private AddressClient addressClient;
 
-  private final Tracer tracer;
+    private final Tracer tracer;
 
-  private Logger logger = LoggerFactory.getLogger(Controller.class);
+    private Logger logger = LoggerFactory.getLogger(Controller.class);
 
-  @Autowired
-  public Controller(CustomerClient customerClient, AddressClient addressClient, Tracer tracer) {
-    this.customerClient = customerClient;
-    this.addressClient = addressClient;
-    this.tracer = tracer;
-  }
-
-  @NewSpan("newspan")
-  @GetMapping(path = "oldcustomers/{id}")
-  public CustomerAndAddress getOldCustomerWithAddress(@SpanTag("spantag") @PathVariable("id") long customerId){
-    var usecase = "old-customers";
-    addUsecaseToSpan(usecase);
-    return withUseCaseBaggage(usecase, CustomerAndAddress.class, () -> {
-      logger.info("COLLECTING OLD CUSTOMER AND ADDRESS WITH ID {} FROM UPSTREAM SERVICE", customerId);
-      Customer customer = customerClient.getCustomer(customerId);
-      Address address = addressClient.getAddressForCustomerId(customerId);
-      return new CustomerAndAddress(customer, address);
-    });
-  }
-
-  @GetMapping(path = "customers/{id}")
-  public CustomerAndAddress getCustomerWithAddress(@PathVariable("id") long customerId){
-    var usecase = "customers";
-    addUsecaseToSpan(usecase);
-    return withUseCaseBaggage(usecase, CustomerAndAddress.class, () -> {
-      logger.info("COLLECTING CUSTOMER AND ADDRESS WITH ID {} FROM UPSTREAM SERVICE", customerId);
-      Customer customer = customerClient.getCustomer(customerId);
-      Address address = addressClient.getAddressForCustomerId(customerId);
-      return new CustomerAndAddress(customer, address);
-    });
-  }
-
-  private void addUsecaseToSpan(String usecase) {
-    var span = tracer.currentSpan();
-    if (span != null) {
-      span.tag("use-case-tag", usecase);
+    @Autowired
+    public Controller(CustomerClient customerClient, AddressClient addressClient, Tracer tracer) {
+        this.customerClient = customerClient;
+        this.addressClient = addressClient;
+        this.tracer = tracer;
     }
-  }
 
-  private <T> T withUseCaseBaggage(String usecase, Class<T> clazz, Supplier<T>supplier) {
-    try (var ignored = this.tracer.createBaggageInScope("use-case-baggage", usecase)) {
-      return supplier.get();
+    @NewSpan("newspan")
+    @GetMapping(path = "oldcustomers/{id}")
+    public CustomerAndAddress getOldCustomerWithAddress(@SpanTag("spantag") @PathVariable("id") long customerId) {
+        var usecase = "old-customers";
+        addUsecaseToSpan(usecase);
+        return withUseCaseBaggage(usecase, CustomerAndAddress.class, () -> {
+            logger.info("COLLECTING OLD CUSTOMER AND ADDRESS WITH ID {} FROM UPSTREAM SERVICE", customerId);
+            Customer customer = customerClient.getCustomer(customerId);
+            Address address = addressClient.getAddressForCustomerId(customerId);
+            return new CustomerAndAddress(customer, address);
+        });
     }
-  }
+
+    @GetMapping(path = "customers/{id}")
+    public CustomerAndAddress getCustomerWithAddress(@PathVariable("id") long customerId) {
+        var usecase = "customers";
+        addUsecaseToSpan(usecase);
+        return withUseCaseBaggage(usecase, CustomerAndAddress.class, () -> {
+            logger.info("COLLECTING CUSTOMER AND ADDRESS WITH ID {} FROM UPSTREAM SERVICE", customerId);
+            Customer customer = customerClient.getCustomer(customerId);
+            Address address = addressClient.getAddressForCustomerId(customerId);
+            return new CustomerAndAddress(customer, address);
+        });
+    }
+
+    private void addUsecaseToSpan(String usecase) {
+        var span = tracer.currentSpan();
+        if (span != null) {
+            span.tag("use-case-tag", usecase);
+        }
+    }
+
+    private <T> T withUseCaseBaggage(String usecase, Class<T> clazz, Supplier<T> supplier) {
+        try (var ignored = this.tracer.createBaggageInScope("use-case-baggage", usecase)) {
+            return supplier.get();
+        }
+    }
 }
