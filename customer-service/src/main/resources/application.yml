@@ -8,6 +8,8 @@ management:
   tracing:
     sampling:
       probability: 1
+    baggage:
+      tag-fields: use-case-baggage # to copy this baggage field to the span as a tag
   otlp:
     tracing:
       endpoint: http://collector:4317

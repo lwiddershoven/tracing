@@ -14,7 +14,8 @@ management:
   tracing:
     sampling:
       probability: 1
-
+    baggage:
+      tag-fields: use-case-baggage
   otlp:
     tracing:
       endpoint: http://collector:4317
